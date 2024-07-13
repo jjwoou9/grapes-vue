@@ -22,9 +22,8 @@ const editor = ref<HTMLElement | null>(null);
 
 onMounted(() => {
   if (editor.value) {
-    const { initializeGrapesEditor, applyEditorPlugin } = useGrapesJS();
-    const grapesEditor = initializeGrapesEditor(editor.value);
-    applyEditorPlugin(grapesEditor);
+    const { initGrapesEditor } = useGrapesJS();
+    initGrapesEditor(editor.value);
   }
 });
 </script>
