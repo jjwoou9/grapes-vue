@@ -1,6 +1,6 @@
 import type { Editor } from 'grapesjs';
 import { RequiredPluginOptions } from '..';
-import { cmdImport } from '@/components/preset/consts';
+import { cmdImport } from '@/components/GrapesEditor/preset/consts';
 
 export default (editor: Editor, config: RequiredPluginOptions) => {
     const pfx = editor.getConfig('stylePrefix');
@@ -28,7 +28,6 @@ export default (editor: Editor, config: RequiredPluginOptions) => {
         },
 
         getContainer() {
-            console.log('getContainer');
             if (!this.container) {
                 const codeViewer = this.getCodeViewer();
                 const container = document.createElement('div');
@@ -64,11 +63,8 @@ export default (editor: Editor, config: RequiredPluginOptions) => {
 
         /**
          * Return the code viewer instance
-         * @returns {CodeViewer}
          */
         getCodeViewer() {
-            console.log('get code Viewer');
-
             if (!this.codeViewer) {
                 this.codeViewer = editor.CodeManager.createViewer({
                     codeName: 'htmlmixed',

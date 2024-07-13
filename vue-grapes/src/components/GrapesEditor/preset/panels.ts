@@ -7,7 +7,7 @@ import {
     cmdDeviceTablet,
     cmdDeviceMobile,
     cmdClear
-} from '@/components/preset/consts';
+} from '@/components/GrapesEditor/preset/consts';
 
 export default (editor: Editor, opts: RequiredPluginOptions) => {
     const { Panels } = editor;

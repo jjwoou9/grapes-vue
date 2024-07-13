@@ -5,7 +5,7 @@ import {
     cmdDeviceDesktop,
     cmdDeviceMobile,
     cmdDeviceTablet,
-} from '@/components/preset/consts';
+} from '@/components/GrapesEditor/preset/consts';
 import openImport from './openImport';
 
 export default (editor: Editor, config: RequiredPluginOptions) => {
