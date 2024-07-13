@@ -23,6 +23,15 @@ import blocks from '@/components/preset/blocks';
 import commands from '@/components/preset/commands';
 import panels from '@/components/preset/panels';
 
+import pluginPresetWebpage from 'grapesjs-preset-webpage';
+import pluginBlocksBasic from 'grapesjs-blocks-basic';
+import pluginComponentCountdown from 'grapesjs-component-countdown';
+import pluginCustomCode from 'grapesjs-custom-code';
+import pluginIndexeddb from 'grapesjs-indexeddb';
+import pluginNavbar from 'grapesjs-navbar';
+import pluginPluginExport from 'grapesjs-plugin-export';
+import pluginPluginForms from 'grapesjs-plugin-forms';
+
 export type PluginOptions = {
   blocks?: string[];
   block?: (blockId: string) => ({});
@@ -109,7 +118,17 @@ const initializeGrapesEditor = (container: HTMLElement) => {
       styles: [],
       scripts: [],
     },
-    plugins: ['gjs-preset-webpage'],
+    plugins: [
+        pluginPresetWebpage,
+        pluginBlocksBasic,
+        pluginComponentCountdown,
+        pluginCustomCode,
+        pluginNavbar,
+        pluginIndexeddb,
+        pluginNavbar,
+        pluginPluginExport,
+        pluginPluginForms,
+    ],
     pluginsOpts: {
       'gjs-preset-webpage': {},
     },
