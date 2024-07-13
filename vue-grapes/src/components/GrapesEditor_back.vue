@@ -3,6 +3,9 @@
     <div class="panel">
       <h1 class="welcome">Welcome to</h1>
       <div class="big-title">
+        <svg class="logo" viewBox="0 0 50 100">
+          <path d="M40 5l-12.9 7.4 -12.9 7.4c-1.4 0.8-2.7 2.3-3.7 3.9 -0.9 1.6-1.5 3.5-1.5 5.1v14.9 14.9c0 1.7 0.6 3.5 1.5 5.1 0.9 1.6 2.2 3.1 3.7 3.9l12.9 7.4 12.9 7.4c1.4 0.8 3.3 1.2 5.2 1.2 1.9 0 3.8-0.4 5.2-1.2l12.9-7.4 12.9-7.4c1.4-0.8 2.7-2.2 3.7-3.9 0.9-1.6 1.5-3.5 1.5-5.1v-14.9 -12.7c0-4.6-3.8-6-6.8-4.2l-28 16.2"/>
+        </svg>
         <span>GrapesJS</span>
       </div>
       <div class="description">
@@ -13,11 +16,12 @@
   </div>
 </template>
 
-<
-<script setup lang="ts">
-import { ref, onMounted } from 'vue'
+<script lang="ts">
+import { defineComponent, nextTick, onMounted, ref } from 'vue';
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
+import pluginPresetWebpage from 'grapesjs-preset-webpage';
+
 import type { Editor, Plugin } from 'grapesjs';
 import blocks from '@/components/preset/blocks';
 import commands from '@/components/preset/commands';
@@ -35,6 +39,8 @@ export type PluginOptions = {
   showStylesOnChange?: boolean;
   useCustomTheme?: boolean;
 };
+
+export type RequiredPluginOptions = Required<PluginOptions>;
 
 const applyPlugin: Plugin<PluginOptions> = (editor, opts: Partial<PluginOptions> = {}) => {
   const config: RequiredPluginOptions = {
@@ -69,9 +75,11 @@ const applyPlugin: Plugin<PluginOptions> = (editor, opts: Partial<PluginOptions>
         .${prefix}${cnum}-bg {
           background-color: ${ccol};
         }
+
         .${prefix}${cnum}-color {
           color: ${ccol};
         }
+
         .${prefix}${cnum}-color-h:hover {
           color: ${ccol};
         }
@@ -85,68 +93,84 @@ const applyPlugin: Plugin<PluginOptions> = (editor, opts: Partial<PluginOptions>
 
   // Load blocks
   blocks(editor, config);
+
   // Load commands
   commands(editor, config);
+
   // Load panels
   panels(editor, config);
 };
 
+export default defineComponent({
+  name: 'GrapesJSEditor',
+  setup() {
+    const editor = ref<HTMLElement | null>(null);
+    const grapesEditor = ref<Editor | null>(null);
 
-export type RequiredPluginOptions = Required<PluginOptions>;
+    const initializeGrapesEditor = (container: HTMLElement) => {
+      return grapesjs.init({
+        height: '100%',
+        showOffsets: true,
+        noticeOnUnload: false,
+        storageManager: false,
+        container: container,
+        fromElement: true,
+        plugins: [pluginPresetWebpage],
+        pluginsOpts: {
+          'grapesjs-preset-webpage': {},
+        },
+      });
+    };
 
-const initializeGrapesEditor = (container: HTMLElement) => {
-  return grapesjs.init({
-    container: container,
-    showOffsets: true,
-    noticeOnUnload: false,
-    fromElement: true,
-    storageManager: {
-      type: 'local',
-      autosave: true,
-      autoload: true,
-    },
-    canvas: {
-      styles: [],
-      scripts: [],
-    },
-    plugins: ['gjs-preset-webpage'],
-    pluginsOpts: {
-      'gjs-preset-webpage': {},
-    },
-  });
-};
+    const applyEditorPlugin = (editorInstance: Editor) => {
+      applyPlugin(editorInstance, {
+        blocks: ['link-block', 'quote', 'text-basic'],
+        block: (blockId: string) => ({
+          label: blockId,
+          attributes: { class: 'fa fa-link' },
+          content: {
+            type: 'link',
+            content: 'Link',
+            style: { color: '#d983a6' },
+          },
+        }),
+        modalImportTitle: 'Import',
+        modalImportButton: 'Import',
+        modalImportLabel: '',
+        modalImportContent: '',
+        importViewerOptions: {},
+        textCleanCanvas: 'Are you sure you want to clear the canvas?',
+        showStylesOnChange: true,
+        useCustomTheme: true,
+      });
+    };
 
-const applyEditorPlugin = (editorInstance: Editor) => {
-  applyPlugin(editorInstance, {
-    blocks: ['link-block', 'quote', 'text-basic'],
-    block: (blockId: string) => ({
-      label: blockId,
-      attributes: { class: 'fa fa-link' },
-      content: {
-        type: 'link',
-        content: 'Link',
-        style: { color: '#d983a6' },
-      },
-    }),
-    modalImportTitle: 'Import',
-    modalImportButton: 'Import',
-    modalImportLabel: '',
-    modalImportContent: '',
-    importViewerOptions: {},
-    textCleanCanvas: 'Are you sure you want to clear the canvas?',
-    showStylesOnChange: true,
-    useCustomTheme: true,
-  });
-};
+    const initGrapesJS = async () => {
+      if (editor.value && !grapesEditor.value) {
+        console.log('Initializing GrapesJS');
+        const newEditor = initializeGrapesEditor(editor.value);
+        grapesEditor.value = newEditor;
+        applyEditorPlugin(newEditor);
 
-const editor = ref<HTMLElement | null>(null);
-onMounted(() => {
-  if (editor.value) {
-    const grapesEditor = initializeGrapesEditor(editor.value);
-    applyEditorPlugin(grapesEditor);
-  }
+        newEditor.on('load', () => {
+          console.log('GrapesJS loaded');
+          newEditor.refresh();
+        });
+      }
+    };
+
+    onMounted(async () => {
+      console.log('Component mounted');
+      await nextTick();
+      initGrapesJS();
+      console.log('GrapesJS initialized');
+    });
+
+    return { editor };
+  },
 });
 </script>
+
 
 
 <style  scoped>
@@ -165,9 +189,9 @@ html {
   max-width: 700px;
   border-radius: 3px;
   padding: 30px 20px;
-  margin: 150px auto 0;
+  margin: 150px auto 0px;
   background-color: #d983a6;
-  box-shadow: 0 3px 10px 0 rgba(0,0,0,0.25);
+  box-shadow: 0px 3px 10px 0px rgba(0,0,0,0.25);
   color:rgba(255,255,255,0.75);
   font: caption;
   font-weight: 100;
@@ -176,7 +200,13 @@ html {
 .welcome {
   text-align: center;
   font-weight: 100;
-  margin: 0;
+  margin: 0px;
+}
+
+.logo {
+  width: 70px;
+  height: 70px;
+  vertical-align: middle;
 }
 
 .logo path {
