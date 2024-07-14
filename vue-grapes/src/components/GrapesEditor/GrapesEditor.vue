@@ -11,19 +11,24 @@
       </div>
     </div>
   </div>
+  <SavePageButton />
 </template>
 
 <
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useGrapesJS } from '@/composables/useGrapesJS';
+import {useGrapesEditorStore} from "@/stores/grapesEditorStore";
+import SavePageButton from './SavePageButton.vue'
 
 const editor = ref<HTMLElement | null>(null);
+const grapesEditorStore = useGrapesEditorStore();
 
 onMounted(() => {
   if (editor.value) {
     const { initGrapesEditor } = useGrapesJS();
-    initGrapesEditor(editor.value);
+    const grapesEditor = initGrapesEditor(editor.value);
+    grapesEditorStore.setEditor(grapesEditor);
   }
 });
 </script>
