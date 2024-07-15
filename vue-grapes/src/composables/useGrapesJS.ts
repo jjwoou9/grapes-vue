@@ -20,7 +20,7 @@ import pluginPluginExport from 'grapesjs-plugin-export';
 import pluginPluginForms from 'grapesjs-plugin-forms';
 
 
-export function useGrapesJS(pageId: string, assets: any[]) {
+export function useGrapesJS(pageId: string) {
 
     const initGrapesEditor = (container: HTMLElement) => {
         return grapesjs.init({
@@ -31,7 +31,6 @@ export function useGrapesJS(pageId: string, assets: any[]) {
             layerManager: layerManager,
             traitManager: traitManager,
             selectorManager: selectorManager,
-            assetManager: { assets: assets, upload: false },
             storageManager: storageSetting(pageId),
             canvas: {
                 styles: styles,

@@ -9,3 +9,14 @@ export const fetcher = async (endpoint: string, options: RequestInit) => {
     }
     return response.json()
 }
+
+
+export const postFetcher = async (endpoint: string, body: object) => {
+    return fetcher(endpoint, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(body),
+    });
+};
