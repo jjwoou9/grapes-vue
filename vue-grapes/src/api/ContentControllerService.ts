@@ -6,6 +6,16 @@ import {PageDto} from '@/types/PageDto';
 const endpoint = '/api/contents';
 
 export class ContentControllerService {
+    /*
+    *   async findPages(): Promise<{ data: PageDto[], error: any }> {
+    try {
+      const response = await axios.get('/api/pages');
+      return { data: response.data, error: null };
+    } catch (error) {
+      return { data: [], error: error };
+    }
+  },
+    * */
 
     public static  findPages() {
         const { data, error, mutate } = useSWRV<PageDto[]>(`${endpoint}/pages`, fetcher);

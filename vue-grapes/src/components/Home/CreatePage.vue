@@ -45,7 +45,7 @@ export default defineComponent({
         await ContentControllerService.createPage(title.value, slug.value);
         title.value = '';
         slug.value = '';
-        emit('page-created');
+        //emit('page-created'); // Successfully created a new page, emit the event
       } catch (e) {
         console.error('Error creating page:', e);
       }

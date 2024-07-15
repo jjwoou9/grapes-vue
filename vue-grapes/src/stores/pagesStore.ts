@@ -7,7 +7,7 @@ export const usePageStore = defineStore('page', {
         pages: [] as PageDto[]
     }),
     getters: {
-        allPages: (state) => state.pages
+        allPages: (state): PageDto[] => state.pages
     },
     actions: {
         setPageList(pages: PageDto[]) {
@@ -17,4 +17,5 @@ export const usePageStore = defineStore('page', {
             this.pages = [...this.pages, ...newPages]
         }
     }
+
 })
