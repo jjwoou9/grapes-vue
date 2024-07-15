@@ -1,5 +1,15 @@
 import grapesjs from 'grapesjs';
 import 'grapesjs/dist/css/grapes.min.css';
+import {
+    storageSetting,
+    panels,
+    styleManager,
+    styles,
+    scripts,
+    traitManager,
+    layerManager,
+    selectorManager
+} from "../utils/editorUtils.ts";
 
 // 플러그인 임포트
 import pluginPresetWebpage from 'grapesjs-preset-webpage';
@@ -12,7 +22,7 @@ import pluginPluginExport from 'grapesjs-plugin-export';
 import pluginPluginForms from 'grapesjs-plugin-forms';
 
 
-export function useGrapesJS() {
+export function useGrapesJS(pageId: string, assets: any[]) {
 
     const initGrapesEditor = (container: HTMLElement) => {
         return grapesjs.init({
@@ -20,14 +30,21 @@ export function useGrapesJS() {
             showOffsets: true,
             noticeOnUnload: false,
             fromElement: true,
-            storageManager: {
-                type: 'local',
-                autosave: true,
-                autoload: true,
-            },
+            styleManager: styleManager,
+            layerManager: layerManager,
+            traitManager: traitManager,
+            selectorManager: selectorManager,
+            panels: panels,
+            assetManager: { assets: assets, upload: false },
+            storageManager: storageSetting(pageId),
+            // storageManager: {
+            //     type: 'local',
+            //     autosave: true,
+            //     autoload: true,
+            // },
             canvas: {
-                styles: [],
-                scripts: [],
+                styles: styles,
+                scripts: scripts,
             },
             plugins: [
                 pluginPresetWebpage,
