@@ -17,7 +17,7 @@
         <tbody class="bg-white divide-y divide-gray-200">
         <tr v-for="page in pageStore.allPages" :key="page.id">
           <td class="px-6 py-4 whitespace-nowrap">
-            <router-link :to="`/editor/${page.id}`">{{ page.id }}</router-link>
+              <RouterLink :to="`/editor/${page.id}`">{{ page.id }}</RouterLink>
           </td>
           <td class="px-6 py-4 whitespace-nowrap">{{ page.title }}</td>
           <td class="px-6 py-4 whitespace-nowrap">{{ page.slug }}</td>

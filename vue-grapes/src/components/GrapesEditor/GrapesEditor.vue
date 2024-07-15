@@ -20,13 +20,18 @@ import { ref, onMounted } from 'vue'
 import { useGrapesJS } from '@/composables/useGrapesJS';
 import {useGrapesEditorStore} from "@/stores/grapesEditorStore";
 import SavePageButton from './SavePageButton.vue'
+import { useRoute } from 'vue-router';
 
+const route = useRoute(); // Get current route object
+const pageId =  ref(route.params.pageId);
 const editor = ref<HTMLElement | null>(null);
 const grapesEditorStore = useGrapesEditorStore();
 
 onMounted(() => {
+  console.log('Page ID:', pageId);
+
   if (editor.value) {
-    const { initGrapesEditor } = useGrapesJS();
+    const { initGrapesEditor } = useGrapesJS(pageId.value as string);
     const grapesEditor = initGrapesEditor(editor.value);
     grapesEditorStore.setEditor(grapesEditor);
   }
