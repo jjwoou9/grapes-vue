@@ -17,7 +17,7 @@ export const usePagesStore = defineStore('pages', {
             } else {
                 console.log("data: ", data);
                 // If data.value is defined
-                if (data) {
+                if (data.value) {
                     this.pages = data.value;
                 } else {
                     console.log("data.value is undefined");
