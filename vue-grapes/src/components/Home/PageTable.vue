@@ -19,36 +19,33 @@
         <td class="px-6 py-4 whitespace-nowrap">{{ page.createdAt }}</td>
         <td class="px-6 py-4 whitespace-nowrap">{{ page.updatedAt }}</td>
       </tr>
-      <tr v-if="isLoading">
-        <td colspan="5" class="px-6 py-4 text-center text-gray-500">Loading...</td>
-      </tr>
       </tbody>
     </table>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, onMounted, computed } from 'vue';
-import { usePagesStore } from '@/stores/pagesStore';
+import {defineComponent, onMounted, ref} from 'vue';
+import { ContentControllerService } from '@/api/ContentControllerService';
+import {PageDto} from "@/types/PageDto";
+import CreatePage from "@/components/Home/CreatePage.vue";
 
 export default defineComponent({
   name: 'PageTable',
+  components: {CreatePage},
   setup() {
-    const pagesStore = usePagesStore();
+    const pages = ref<PageDto[]>([]);
 
     onMounted(async () => {
-      await pagesStore.fetchPages();
+      const { data } = await ContentControllerService.findPages();
+      console.log(data);
+      if(data.value){
+        pages.value = data.value;
+      }
     });
-
-    const pages = computed(() => {
-      pagesStore.pages
-      console.log(pagesStore.pages)
-    });
-    const isLoading = computed(() => pagesStore.isLoading);
 
     return {
       pages,
-      isLoading,
     };
   },
 });

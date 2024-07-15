@@ -32,23 +32,20 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue';
 import { ContentControllerService } from '@/api/ContentControllerService';
-import { usePagesStore } from '@/stores/pagesStore'
 
 export default defineComponent({
   name: 'CreatePage',
-  setup() {
+  emits: ['page-created'],
+  setup(props, { emit }) {
     const title = ref('');
     const slug = ref('');
-    const pagesStore = usePagesStore();
 
     const handleSubmit = async () => {
       try {
-        await ContentControllerService.createPage(title.value, slug.value)
-            .then(() => {
-              title.value = '';
-              slug.value = '';
-              pagesStore.fetchPages();
-            });
+        await ContentControllerService.createPage(title.value, slug.value);
+        title.value = '';
+        slug.value = '';
+        emit('page-created');
       } catch (e) {
         console.error('Error creating page:', e);
       }
@@ -62,12 +59,3 @@ export default defineComponent({
   },
 });
 </script>
-
-<style scoped>
-.container {
-  max-width: 800px;
-}
-.btn-primary {
-  @apply bg-blue-500 text-white font-semibold py-2 px-4 rounded shadow hover:bg-blue-600;
-}
-</style>

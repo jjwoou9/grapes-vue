@@ -1,32 +1,20 @@
+// stores/pageStore.ts
 import { defineStore } from 'pinia'
-import {PageDto} from '@/types/PageDto';
-import { ContentControllerService } from '@/api/ContentControllerService';
+import { PageDto } from '../types/PageDto'
 
-export const usePagesStore = defineStore('pages', {
+export const usePageStore = defineStore('page', {
     state: () => ({
-        pages: [] as PageDto[],
-        isLoading: false,
-        error: null,
+        pages: [] as PageDto[]
     }),
+    getters: {
+        allPages: (state) => state.pages
+    },
     actions: {
-        async fetchPages() {
-            this.isLoading = true;
-            const { data, error } = await ContentControllerService.findPages();
-            if (error) {
-                 console.error(error);
-            } else {
-                console.log("data: ", data);
-                // If data.value is defined
-                if (data.value) {
-                    this.pages = data.value;
-                } else {
-                    console.log("data.value is undefined");
-                }
-            }
-            this.isLoading = false;
+        setPageList(pages: PageDto[]) {
+            this.pages = pages
         },
-        setPages(pages: PageDto[]) {
-            this.pages = pages;
-        },
+        addPages(newPages: PageDto[]) {
+            this.pages = [...this.pages, ...newPages]
+        }
     }
-});
+})
