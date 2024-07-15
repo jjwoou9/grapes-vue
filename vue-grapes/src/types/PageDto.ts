@@ -4,4 +4,4 @@ export interface PageDto {
     slug: string;
     createdAt: string;
     updatedAt: string;
-};
+}

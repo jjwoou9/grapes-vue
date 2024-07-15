@@ -6,4 +6,4 @@ export interface PageContentDto extends PageDto {
     components: string;
     assets: string;
     styles: string;
-};
+}
