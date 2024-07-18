@@ -57,8 +57,8 @@ export default defineComponent({
     const { data, error, isValidating } = useSWRV('pages', fetchPages);
 
     watch(data, newPages => {
-      if (newPages?.value !== undefined) {
-        pageStore.setPageList(newPages.value);
+      if (newPages) {
+        pageStore.setPageList(newPages);
       }
     });
 
